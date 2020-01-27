@@ -2,7 +2,7 @@ include("Evolutionary/src/Evolutionary.jl")
 using Combinatorics
 using Random
 
-
+horizon = 7
 
 people = ["Пешо","Гошо","Иван","Мария","Петруния","Гергинка"]
 
@@ -14,23 +14,21 @@ peopleindexes = collect(permutations(1:length(people), 3))
 
 function fitness(n::AbstractVector)
 
-	print(n)
-	exit()
 
 	sum = 0
-    i1 = [x[1] for x in n[1:7]]
-    i2 = [x[2] for x in n[1:7]]
-    i3 = [x[3] for x in n[1:7]]
+    i1 = [x[1] for x in n[1:horizon]]
+    i2 = [x[2] for x in n[1:horizon]]
+    i3 = [x[3] for x in n[1:horizon]]
 
-    d=Dict([(i,count(x->x==i,append!(i1,i2))) for i in (1:7)]) # count occurances
-
+    d=Dict([(i,count(x->x==i,vcat(i1,i2, i3))) for i in (1:6)]) # count occurances
     for (k,v) in d
+    	
     	sum += 2^v
     end
 
-    # sum += penalties()
-    print(append!(i2, i3), d, sum)
-   # println(sum)
+    # sum += penalties()*2^horizon
+    #println(append!(append!(i1,i2), i3), d, sum)
+    println(sum)
 
     return sum
     
@@ -49,7 +47,7 @@ end
 
 best, invbestfit, generations, tolerance, history = Evolutionary.ga(
     x -> fitness(x),                    # Function to MINIMISE
-    7,                        # Length of chromosome
+    horizon,                        # Length of chromosome
     initPopulation = peopleindexes,
     selection = Evolutionary.roulette,                   # Options: sus
     mutation = Evolutionary.inversion,                   # Options:
@@ -57,7 +55,7 @@ best, invbestfit, generations, tolerance, history = Evolutionary.ga(
     mutationRate = 0.2,
     crossoverRate = 0.5,
     ɛ = 2,                                # Elitism
-    iterations = 250,
+    iterations = 50,
     tolIter = 20,
     populationSize = 50,
     interim = true);
@@ -71,7 +69,7 @@ print(invbestfit)
 #print(tolerance)
 
 println("\nпърва - втора - нощна")
-for i in best[1:7]
+for i in best[1:horizon]
 
 	println(people[i[1]], " - " ,people[i[2]], " - ", people[i[3]])
 end
