@@ -10,6 +10,9 @@ people = ["Пешо", "Гошо", "Иван", "Мария", "Петруния", 
 
 rng = MersenneTwister(1234)
 
+
+
+
 peopleindexes = collect(permutations(1:length(people), 3))
 
 
@@ -30,7 +33,7 @@ function fitness(n::AbstractVector)
 
    
     #println(append!(append!(i1,i2), i3), d, sum)
-    println(sum)
+  #  println(sum)
 
     return sum
 
@@ -70,8 +73,8 @@ best, invbestfit, generations, tolerance, history = Evolutionary.ga(
 
 
 
-print(best[1:7])
-print(invbestfit)
+println(best)
+println(invbestfit)
 #print(generations)
 #print(history)
 #print(tolerance)
