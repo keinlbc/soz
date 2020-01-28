@@ -41,7 +41,7 @@ using Random
         
         if isa(init, Vector)
           #  @assert length(init) == N "Dimensionality of initial population must be $(N)"
-            individual = init
+            individual = init[1:7]
         elseif isa(init, Matrix)
             @assert size(init, 1) == N "Dimensionality of initial pssbopulation must be $(N)"
             populationSize = size(init, 2)
