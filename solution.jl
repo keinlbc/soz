@@ -25,8 +25,9 @@ function fitness(n::AbstractVector)
         sum += 2^v
     end
 
-    sum += penalty(n)*2^horizon
+    sum += penalty(n)*(2^horizon)
 
+   
     #println(append!(append!(i1,i2), i3), d, sum)
     println(sum)
 
@@ -40,17 +41,22 @@ function initpop(n::Int)
     return shuffle!(rng, peopleindexes)[n]
 end
 
-function penalty(vector::AbstractVector)
+function penalty(state::AbstractVector)
 
-    for i in 2:size(vector)-1 #to make sure we don't go out of boundaries
-        threeConsecutiveDays = vcat(vector[i-1], vector[i], vector[i+1])
+for i in 2:length(state)-1 #to make sure we don't go out of boundaries
+	threeConsecutiveDays = vcat(state[i-1], state[i], state[i+1])
 
-        for j in 1:9 # 3 days, each day has 3 shifts
-           if (count(occurences -> occurences == threeConsecutiveDays[j], threeConsecutiveDays) >= 3) true end
-        end
-    end
+	# 3 days, each day has 3 shifts
+	counter = Dict([(j,count(occurences -> occurences == j, threeConsecutiveDays)) for j in (1:horizon)])
 
-    return false
+			for (k,v) in counter
+
+				if v >= 3 return 1
+			end
+		end
+	end
+
+	return 0
 end
 
 
@@ -63,8 +69,8 @@ best, invbestfit, generations, tolerance, history = Evolutionary.ga(
     crossover = Evolutionary.singlepoint,                # Options:
     mutationRate = 0.2,
     crossoverRate = 0.5,
-    ɛ = 2,                                # Elitism
-    iterations = 50,
+ #   ɛ = 2,                                # Elitism
+    iterations = 250,
     tolIter = 20,
     populationSize = 50,
     interim = true);
