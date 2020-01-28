@@ -7,11 +7,7 @@ horizon = 7
 
 people = ["Пешо", "Гошо", "Иван", "Мария", "Петруния", "Гергинка"]
 
-
 rng = MersenneTwister(1234)
-
-
-
 
 peopleindexes = collect(permutations(1:length(people), 3))
 
@@ -33,7 +29,7 @@ function fitness(n::AbstractVector)
 
    
     #println(append!(append!(i1,i2), i3), d, sum)
-  #  println(sum)
+  	#println(sum)
 
     return sum
 
