@@ -26,7 +26,7 @@ function fitness(n::AbstractVector)
         sum += 2^v
     end
 
-    sum += penalty([consecutiveConstraint, cantWorkTogetherConstraint] ,n)*(2^horizon)
+    sum += penalty([consecutiveConstraint, samePeopleTwoDaysConstraint, cantWorkTogetherConstraint], n)*(2^horizon)
 
    
     #println(append!(append!(i1,i2), i3), d, sum)
@@ -44,10 +44,10 @@ function initpop(n::Int)
 end
 
 
-function penalty(constraintFunctions::Function[], state::AbstractVector)
+function penalty(constraints::AbstractVector{Function}, state::AbstractVector)
 	sum = 0
-	for i in constraintFunctions
-		sum += constraintFunctions(state)*(2^horizon)
+	for constraint in constraints
+		sum += constraint(state)*(2^horizon)
 	end
 	return sum
 end
