@@ -1,4 +1,5 @@
 include("Evolutionary/src/Evolutionary.jl")
+include("Evolutionary/src/constraints.jl")
 using Combinatorics
 using Random
 
@@ -25,7 +26,7 @@ function fitness(n::AbstractVector)
         sum += 2^v
     end
 
-    sum += penalty(n)*(2^horizon)
+    sum += penalty([consecutiveConstraint, cantWorkTogetherConstraint] ,n)*(2^horizon)
 
    
     #println(append!(append!(i1,i2), i3), d, sum)
@@ -37,26 +38,18 @@ function fitness(n::AbstractVector)
 
 end
 
+
 function initpop(n::Int)
     return shuffle!(rng, peopleindexes)[n]
 end
 
-function penalty(state::AbstractVector)
 
-for i in 2:length(state)-1 #to make sure we don't go out of boundaries
-	threeConsecutiveDays = vcat(state[i-1], state[i], state[i+1])
-
-	# 3 days, each day has 3 shifts
-	counter = Dict([(j,count(occurences -> occurences == j, threeConsecutiveDays)) for j in (1:horizon)])
-
-			for (k,v) in counter
-
-				if v >= 3 return 1
-			end
-		end
+function penalty(constraintFunctions::Function[], state::AbstractVector)
+	sum = 0
+	for i in constraintFunctions
+		sum += constraintFunctions(state)*(2^horizon)
 	end
-
-	return 0
+	return sum
 end
 
 
