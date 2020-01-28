@@ -9,6 +9,9 @@ people = ["Пешо", "Гошо", "Иван", "Мария", "Петруния", 
 
 rng = MersenneTwister(1234)
 
+
+
+
 peopleindexes = collect(permutations(1:length(people), 3))
 
 
@@ -28,8 +31,7 @@ function fitness(n::AbstractVector)
     sum += penalty([consecutiveConstraint, samePeopleTwoDaysConstraint, cantWorkTogetherConstraint], n)*(2^horizon)
 
    
-    #println(append!(append!(i1,i2), i3), d, sum)
-  	#println(sum)
+
 
     return sum
 
