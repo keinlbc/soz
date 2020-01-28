@@ -41,11 +41,11 @@ function ga(objfun::Function, N::Int;
     fitness = zeros(populationSize)
     population = Array{typeof(individual)}(undef, populationSize)
     offspring = similar(population)
-
+    randomel = r = rand(1:length(initPopulation), 7)
     # Generate population
     for i in 1:populationSize
         if isa(initPopulation, Vector)
-            population[i] =   shuffle!(MersenneTwister(1234), initPopulation)#initPopulation.*rand(eltype(initPopulation), N)
+            population[i] =   initPopulation[randomel] #### Verry important, generate population
         elseif isa(initPopulation, Matrix)
             population[i] = initPopulation[:, i]
         elseif isa(initPopulation, Function)
